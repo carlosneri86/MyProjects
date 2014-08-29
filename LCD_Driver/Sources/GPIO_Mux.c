@@ -89,7 +89,23 @@ void GPIO_vfnPinMux(uint8_t ePort, uint8_t bPin, uint8_t bMuxSelection)
 		/* take the PORTx_PCR0 address */
 		pdwPortRegister = (uint32_t*)GPIO_gadwPortGPIO[ePort];
 		pdwPortRegister[bPin] = PORT_PCR_MUX(bMuxSelection);
+		/* TODO: add a FLAGS parameter for pull up/down and open drain */
 		
+	}
+}
+
+
+void GPIO_vfnPinSettings(uint8_t ePort, uint8_t bPin, uint8_t bPinSettings)
+{
+	uint32_t * pdwPortRegister;
+	/* confirm there port is available */
+	if(ePort < GPIO_PORT_MAX)
+	{
+		/*This function assumes the pin is initialized*/		
+		/* take the PORTx_PCR0 address */
+		pdwPortRegister = (uint32_t*)GPIO_gadwPortGPIO[ePort];
+		pdwPortRegister[bPin] = bPinSettings;
+		/* TODO: add a FLAGS parameter for pull up/down and open drain */
 		
 	}
 }

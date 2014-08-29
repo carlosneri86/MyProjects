@@ -88,6 +88,8 @@ void BoardConfig_vfnInit(void)
 	
 	SIM_SCGC5 |= SIM_SCGC5_PORTB_MASK | SIM_SCGC5_PORTC_MASK | SIM_SCGC5_PORTD_MASK;
 	
+	
+	/* LCD Pins */
 	GPIO_vfnPinMux(GPIO_PORT_C,10,GPIO_MUX_ALT_1);
 	
 	GPIO_vfnPinMux(GPIO_PORT_C,11,GPIO_MUX_ALT_1);
@@ -102,11 +104,18 @@ void BoardConfig_vfnInit(void)
 	
 	GPIO_vfnPinMux(GPIO_PORT_B,19,GPIO_MUX_ALT_1);
 	
+	/* LCD data and control pins set up */
+	
 	GPIOC_PDDR |= (1<<10) | (1<<11) | (1<<12) | (1<<13);
 	
 	GPIOD_PDDR |= (1<<7) | (1<<6);
 	
 	GPIOB_PDDR |= (1<<19);
+	
+	/* I2C Pins set up */
+	GPIO_vfnPinMux(GPIO_PORT_E,24,GPIO_MUX_ALT_5);
+		
+	GPIO_vfnPinMux(GPIO_PORT_E,25,GPIO_MUX_ALT_5);
 }
 
 

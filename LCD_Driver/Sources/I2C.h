@@ -4,9 +4,9 @@
 *
 *
 **END********************************************************************************************/
+#ifndef I2C_H_
+#define I2C_H_
 
-#ifndef GPIO_H_
-#define GPIO_H_
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 //                                      Includes Section                                         
@@ -17,40 +17,16 @@
 //                                  Defines & Macros Section                                     
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
+#define I2C_TO_USE	(0)
+
+#define I2C_MULT	(0x00)
+
+#define	I2C_ICR		(0x14)
+
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 //                                      Typedef Section                                          
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-typedef enum
-{
-	GPIO_PORT_A = 0,
-	GPIO_PORT_B,
-	GPIO_PORT_C,
-	GPIO_PORT_D,
-	GPIO_PORT_E,
-	GPIO_PORT_MAX
-}eGPIOPorts;
 
-typedef enum
-{
-	GPIO_MUX_ALT_0 = 0,
-	GPIO_MUX_ALT_1,
-	GPIO_MUX_ALT_2,
-	GPIO_MUX_ALT_3,
-	GPIO_MUX_ALT_4,
-	GPIO_MUX_ALT_5,
-	GPIO_MUX_ALT_6,
-	GPIO_MUX_ALT_7,
-	GPIO_MUX_MAX
-}eGPIOMuxOptions;
-
-typedef enum
-{
-	GPIO_SETTINGS_PULL_SELECT = 1,
-	GPIO_SETTINGS_PULL_ENABLE = 2,
-	GPIO_SETTINGS_SLOW_SLEW = 4,
-	GPIO_SETTINGS_FILTER_ENABLED = 16,
-	GPIO_SETTINGS_HIGH_DRIVE_STRENGTH = 64,
-}eGPIOSettingsOptions;
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 //                                Function-like Macros Section                                   
 ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -71,14 +47,14 @@ typedef enum
 extern "C" {
 #endif // __cplusplus
 
-void GPIO_vfnPinMux(uint8_t ePort, uint8_t bPin, uint8_t bMuxSelection);
+
 
 #if defined(__cplusplus)
 }
 #endif // __cplusplus
 
 
-#endif /* GPIO_H_ */
+#endif /* I2C_H_ */
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 // EOF
 ///////////////////////////////////////////////////////////////////////////////////////////////////
