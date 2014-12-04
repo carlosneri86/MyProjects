@@ -20,7 +20,7 @@
 
 #define SWTIMER_MAX_TIMERS	(16UL)
 
-#define SWTIMER_HW_COUNTER	((BUS_CLOCK/2)/1000UL)
+#define SWTIMER_HW_COUNTER	((OSCILLATOR/2)/1000UL)
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 //                                       Typedef Section                        
 ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -39,7 +39,7 @@ static void (* SWTimer_vfnpCallbacks[SWTIMER_MAX_TIMERS])(void);
 //                                   Global Constants Section                   
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
-const static uint16_t  LPTimer_gwaEnableMasks[SWTIMER_MAX_TIMERS] =
+const static uint16_t  SWTimer_gwaEnableMasks[SWTIMER_MAX_TIMERS] =
 {
 		(1<<0), (1<<1), (1<<2), (1<<3), (1<<4),
 		(1<<5), (1<<6), (1<<7), (1<<8), (1<<9),
@@ -65,34 +65,34 @@ static uint16_t SWTimer_gwTimersEnabled = 0;
 
 static SWTimer_t SWTimers_gtCounters[SWTIMER_MAX_TIMERS];
 
-static uint8_t SWTimer_CurrrentTimers = 0;
+static uint8_t SWTimer_gbCurrrentTimers = 0;
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 //                                      Functions Section                       
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
-void SWTimer_Init(void)
+void SWTimer_vfnInit(void)
 {
 	LPTimer_Init((uint8_t)LPTIMER_PRESCALER_BY_2,(uint8_t)LPTIMER_PRESCALER_CLOCK_3,SWTIMER_HW_COUNTER);
 	
 	LPTimer_EnableTimer();
 }
 
-uint8_t SWTimer_AllocateChannel(uint32_t dwCounter, void (* vfnpTimerCallback)(void))
+uint8_t SWTimer_vfnAllocateChannel(uint32_t dwCounter, void (* vfnpTimerCallback)(void))
 {
 	uint8_t bStatus = SWTIMER_ERROR;
 	
-	if(SWTIMER_MAX_TIMERS > SWTimer_CurrrentTimers)
+	if(SWTIMER_MAX_TIMERS > SWTimer_gbCurrrentTimers)
 	{
-		SWTimers_gtCounters[SWTimer_CurrrentTimers].dwCounter = dwCounter;
-		SWTimers_gtCounters[SWTimer_CurrrentTimers].dwCounterReload = dwCounter;
+		SWTimers_gtCounters[SWTimer_gbCurrrentTimers].dwCounter = dwCounter;
+		SWTimers_gtCounters[SWTimer_gbCurrrentTimers].dwCounterReload = dwCounter;
 		
 		if(vfnpTimerCallback != NULL)
 		{
-			SWTimer_vfnpCallbacks[SWTimer_CurrrentTimers] = vfnpTimerCallback;
+			SWTimer_vfnpCallbacks[SWTimer_gbCurrrentTimers] = vfnpTimerCallback;
 		
-			bStatus = SWTimer_CurrrentTimers;
-			SWTimer_CurrrentTimers++;
+			bStatus = SWTimer_gbCurrrentTimers;
+			SWTimer_gbCurrrentTimers++;
 			
 		}
 	}
@@ -100,15 +100,15 @@ uint8_t SWTimer_AllocateChannel(uint32_t dwCounter, void (* vfnpTimerCallback)(v
 	return(bStatus);
 }
 
-void SWTimer_EnableTimer(uint8_t bTimerToEnable)
+void SWTimer_vfnEnableTimer(uint8_t bTimerToEnable)
 {	
 	if(SWTIMER_MAX_TIMERS > bTimerToEnable)
 	{
-		SWTimer_gwTimersEnabled |= LPTimer_gwaEnableMasks[bTimerToEnable];
+		SWTimer_gwTimersEnabled |= SWTimer_gwaEnableMasks[bTimerToEnable];
 	}
 }
 
-void SWTimer_UpdateCounter(uint8_t bTimerToUpdate, uint32_t dwNewCounter)
+void SWTimer_vfnUpdateCounter(uint8_t bTimerToUpdate, uint32_t dwNewCounter)
 {
 	if(SWTIMER_MAX_TIMERS > bTimerToUpdate)
 	{
@@ -117,15 +117,15 @@ void SWTimer_UpdateCounter(uint8_t bTimerToUpdate, uint32_t dwNewCounter)
 	}
 }
 
-void SWTimer_DisableTimer(uint8_t bTimerToDisable)
+void SWTimer_vfnDisableTimer(uint8_t bTimerToDisable)
 {
 	if(SWTIMER_MAX_TIMERS > bTimerToDisable)
 	{
-		SWTimer_gwTimersEnabled &= ~LPTimer_gwaEnableMasks[bTimerToDisable];
+		SWTimer_gwTimersEnabled &= ~SWTimer_gwaEnableMasks[bTimerToDisable];
 	}
 }
 
-void SWTimer_ServiceTimers(void)
+void SWTimer_vfnServiceTimers(void)
 {
 	uint8_t bMaxCounter = SWTIMER_MAX_TIMERS - 1;
 	
@@ -135,7 +135,7 @@ void SWTimer_ServiceTimers(void)
 		
 		do 
 		{
-			if(SWTimer_gwTimersEnabled&LPTimer_gwaEnableMasks[bMaxCounter])
+			if(SWTimer_gwTimersEnabled&SWTimer_gwaEnableMasks[bMaxCounter])
 			{
 				SWTimers_gtCounters[bMaxCounter].dwCounter--;
 				

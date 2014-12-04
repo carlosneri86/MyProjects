@@ -73,6 +73,7 @@ uint8_t LCDDriver_WriteString(uint8_t * bpStringToWrite, uint8_t bAmountOfCharac
 
 uint8_t LCDDriver_MoveCursor(uint8_t bXAxis, uint8_t bYAxis);
 
+uint8_t LCDDriver_vfnStatus(void);
 #if defined(__cplusplus)
 }
 #endif // __cplusplus

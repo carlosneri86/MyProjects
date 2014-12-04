@@ -35,7 +35,7 @@
 
 #define LCD_DRIVER_LINE_2			(0xC0)
 
-#define LCD_DRIVER_RESET_TIMEOUT	(100/SWTIMER_BASE_TIME)
+#define LCD_DRIVER_RESET_TIMEOUT	(50/SWTIMER_BASE_TIME)
 
 #define LCD_DRIVER_TIMEOUT			(5/SWTIMER_BASE_TIME)
 
@@ -111,9 +111,9 @@ static void (* const LCDDriver_vfnpaStateMachine[LCD_DRIVER_MAX_STATES])(void) =
 
 static const uint8_t LCDDriver_gbaInit[LCD_DRIVER_INIT_SIZE] =
 {
-		0x02,		/* two lines */
-		0x28,		/* two lines */
-		0x0F,		/* display off, cursor off */
+		0x02,		/* 4 bit mode */
+		0x28,		/* 4 bit mode, two lines */
+		0x0C,		/* display on, cursor off */
 		0x01,		/* clear screen, home */
 		0x06		/* increment cursor*/
 };
@@ -144,9 +144,9 @@ void LCDDriver_Init(void)
 {
 	LCD_DRIVER_SET_STATUS(LCD_DRIVER_BUSY_MASK_STATUS);
 	
-	LCDDriver_Timer = SWTimer_AllocateChannel(LCD_DRIVER_RESET_TIMEOUT,LCDDriver_TimerCallback);
+	LCDDriver_Timer = SWTimer_vfnAllocateChannel(LCD_DRIVER_RESET_TIMEOUT,LCDDriver_TimerCallback);
 	
-	SWTimer_EnableTimer(LCDDriver_Timer);
+	SWTimer_vfnEnableTimer(LCDDriver_Timer);
 	
 	LCDDriver_tStateMachine.bCurrentState = LCD_DRIVER_WAIT_TIMER_STATE;
 	
@@ -179,7 +179,7 @@ uint8_t LCDDriver_WriteString(uint8_t * bpStringToWrite, uint8_t bAmountOfCharac
 		
 		LCDDriver_tStateMachine.bNextState = LCD_DRIVER_STRING_STATE;
 		
-		SWTimer_EnableTimer(LCDDriver_Timer);
+		SWTimer_vfnEnableTimer(LCDDriver_Timer);
 		
 		bError = LCD_DRIVER_OK;
 	}
@@ -217,6 +217,18 @@ uint8_t LCDDriver_MoveCursor(uint8_t bXAxis, uint8_t bYAxis)
 	}
 	
 	return(bError);
+}
+
+uint8_t LCDDriver_vfnStatus(void)
+{
+	uint8_t bStatus = 0;
+	
+	if(LCD_DRIVER_CHECK_STATUS(LCD_DRIVER_BUSY_MASK_STATUS))
+	{
+		bStatus = 1;
+	}
+	
+	return(bStatus);
 }
 
 static void LCDDriver_WriteCommand(uint8_t bCommand)
@@ -279,7 +291,7 @@ static void LCDDriver_InitState(void)
 					
 		LCDDriver_tStateMachine.bNextState = LCD_DRIVER_INITIALIZATION_STATE;
 		
-		SWTimer_EnableTimer(LCDDriver_Timer);
+		SWTimer_vfnEnableTimer(LCDDriver_Timer);
 		
 		bInitOffset++;
 
@@ -292,7 +304,7 @@ static void LCDDriver_InitState(void)
 		
 		LCD_DRIVER_CLEAR_STATUS(LCD_DRIVER_BUSY_MASK_STATUS);
 		
-		SWTimer_UpdateCounter(LCDDriver_Timer, LCD_DRIVER_TIMEOUT);
+		SWTimer_vfnUpdateCounter(LCDDriver_Timer, LCD_DRIVER_TIMEOUT);
 	}
 }
 
@@ -332,7 +344,7 @@ static void LCDDriver_WriteStringState(void)
 			LCDDriver_WriteCommand((LCD_DRIVER_LINE_2&0x0F));
 		}
 		
-		SWTimer_EnableTimer(LCDDriver_Timer);
+		SWTimer_vfnEnableTimer(LCDDriver_Timer);
 		
 		LCDDriver_tStateMachine.bCurrentState = LCD_DRIVER_WAIT_TIMER_STATE;
 		
@@ -353,7 +365,7 @@ void LCDDriver_TimerCallback(void)
 {
 	LCD_DRIVER_SET_STATUS(LCD_DRIVER_TIMEOUT_MASK_STATUS);
 
-	SWTimer_DisableTimer(LCDDriver_Timer);
+	SWTimer_vfnDisableTimer(LCDDriver_Timer);
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////

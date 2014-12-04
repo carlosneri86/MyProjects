@@ -1,6 +1,6 @@
 <Analysispoints>
 	<Name>AnalysispointsManager</Name>
-	<ProjectPath>C:/Users/b22385/Documents/Codes/CW Workspaces/MyStuff_CW/LCD_Driver/SaAnalysispointsManager.apconfig</ProjectPath>
+	<ProjectPath>C:/Users/b22385/git/MyProjects/LCD_Driver/SaAnalysispointsManager.apconfig</ProjectPath>
 	<MaxNumberOfCores>1</MaxNumberOfCores>
 	<Comments>Analysispoints Manager</Comments>
 	<IgnoreAll>false</IgnoreAll>

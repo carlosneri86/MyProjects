@@ -57,9 +57,9 @@ static uint8_t Heartbeat_Timer = 0;
 
 void Heartbeat_Init(void)
 {
-	Heartbeat_Timer = SWTimer_AllocateChannel(HEARTBEAT_TIMER, Heartbeat_TimerCallback);
+	Heartbeat_Timer = SWTimer_vfnAllocateChannel(HEARTBEAT_TIMER, Heartbeat_TimerCallback);
 	
-	SWTimer_EnableTimer(Heartbeat_Timer);
+	SWTimer_vfnEnableTimer(Heartbeat_Timer);
 }
 
 void Heartbeat_TimerCallback(void)

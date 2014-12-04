@@ -43,17 +43,17 @@
 extern "C" {
 #endif // __cplusplus
 
-void SWTimer_Init(void);
+void SWTimer_vfnInit(void);
 
-uint8_t SWTimer_AllocateChannel(uint32_t dwCounter, void (* vfnpTimerCallback)(void));
+uint8_t SWTimer_vfnAllocateChannel(uint32_t dwCounter, void (* vfnpTimerCallback)(void));
 
-void SWTimer_EnableTimer(uint8_t bTimerToEnable);
+void SWTimer_vfnEnableTimer(uint8_t bTimerToEnable);
 
-void SWTimer_DisableTimer(uint8_t bTimerToDisable);
+void SWTimer_vfnDisableTimer(uint8_t bTimerToDisable);
 
-void SWTimer_UpdateCounter(uint8_t bTimerToUpdate, uint32_t dwNewCounter);
+void SWTimer_vfnUpdateCounter(uint8_t bTimerToUpdate, uint32_t dwNewCounter);
 
-void SWTimer_ServiceTimers(void);
+void SWTimer_vfnServiceTimers(void);
 
 #if defined(__cplusplus)
 }
